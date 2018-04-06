@@ -32,13 +32,16 @@ class game():
         for letter in secretWord:
             if letter not in self.differentLetters:
                 self.differentLetters.append(letter)
-        print len(self.differentLetters)
+        return len(self.differentLetters)
 
     def newWord(self, secretWord):
         if (self.wordDifferentLetters(secretWord)) > self.guesses:
-            print 'Maior'
-        else:
-            print 'Menor'
+            if raw_input('You are in the hard mode. Do you want a new random word? (Y/N): ').lower() == 'y':
+                print 'New word selected!'
+                secret = word()
+                secretWord = secret.loadWord().lower()
+            else:
+                pass
 
     def isWordGuessed(self, secretWord, lettersGuessed):
         self.secretLetters = []
@@ -68,8 +71,7 @@ class game():
         return self.available
 
     def hangman(self, secretWord):
-
-        self.guesses = 8
+        self.guesses = 5
         self.lettersGuessed = []
         self.welcomeMessage(secretWord)
         self.wordDifferentLetters(secretWord)
