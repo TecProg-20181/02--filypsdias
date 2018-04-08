@@ -1,5 +1,7 @@
 import random
 import string
+import os
+import time
 
 WORDLIST_FILENAME = "words.txt"
 
@@ -35,13 +37,19 @@ class game():
         return len(self.differentLetters)
 
     def newWord(self, secretWord):
-        if (self.wordDifferentLetters(secretWord)) > self.guesses:
-            if raw_input('You are in the hard mode. Do you want a new random word? (Y/N): ').lower() == 'y':
-                print 'New word selected!'
-                secret = word()
-                secretWord = secret.loadWord().lower()
-            else:
-                pass
+        self.differentNumber = self.wordDifferentLetters(secretWord)
+        if (self.differentNumber) > self.guesses:
+            # if raw_input('You are in the hard mode. Do you want a new random word? (Y/N): ').lower() == 'y':
+            print 'Your word have too many different letters'
+            print 'Selecting a new word'
+            time.sleep(1)
+            os.system('clear')
+            secret = word()
+            secretWord = secret.loadWord().lower()
+            self.differentNumber = self.wordDifferentLetters(secretWord)
+        else:
+            pass
+        return secretWord
 
     def isWordGuessed(self, secretWord, lettersGuessed):
         self.secretLetters = []
@@ -71,11 +79,13 @@ class game():
         return self.available
 
     def hangman(self, secretWord):
-        self.guesses = 5
+        self.guesses = int(raw_input("How many guesses you want? "))
         self.lettersGuessed = []
-        self.welcomeMessage(secretWord)
-        self.wordDifferentLetters(secretWord)
-        self.newWord(secretWord)
+        self.differentNumber = self.wordDifferentLetters(secretWord)
+        while (self.differentNumber) > self.guesses:
+            secretWord = self.newWord(secretWord)
+            self.differentNumber = self.wordDifferentLetters(secretWord)
+
 
         while self.isWordGuessed(secretWord, self.lettersGuessed) == False and self.guesses > 0:
             print 'You have ', self.guesses, 'guesses left.'
@@ -90,12 +100,14 @@ class game():
             if letter in self.lettersGuessed:
 
                 self.guessed = self.getGuessedWord(secretWord, self.lettersGuessed)
-                print 'Oops! You have already guessed that letter: ', self.guessed.upper()
+
+                print 'Oops! You have already guessed that letter: ' ,self.guessed.upper()
 
             elif letter in secretWord:
                 self.lettersGuessed.append(letter)
 
                 self.guessed = self.getGuessedWord(secretWord, self.lettersGuessed)
+
                 print 'Good Guess: ', self.guessed.upper()
 
             else:
@@ -104,13 +116,15 @@ class game():
 
                 self.guessed = self.getGuessedWord(secretWord, self.lettersGuessed)
 
-                print 'Oops! That letter is not in my word: ',  self.guessed.upper()
+                print 'Oops! That letter is not in my word: ', self.guessed.upper()
             print '------------'
 
         else:
             if self.isWordGuessed(secretWord, self.lettersGuessed) == True:
+                os.system('clear')
                 print 'Congratulations, you won!'
             else:
+                os.system('clear')
                 print 'Sorry, you ran out of guesses. The word was ', secretWord.upper(), '.'
 
 
