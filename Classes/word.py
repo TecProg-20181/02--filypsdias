@@ -1,6 +1,5 @@
 import random
 import string
-from sets import Set
 
 WORDLIST_FILENAME = "TxtFiles/words.txt"
 
@@ -20,17 +19,24 @@ class Word():
         self.line = self.inFile.readline()
         self.wordlist = string.split(self.line)
         return random.choice(self.wordlist)
+    
+    def wordDifferentLetters(self, secretWord):
+        self.differentLetters = []
+        for letter in secretWord:
+            if letter not in self.differentLetters:
+                self.differentLetters.append(letter)
+        return len(self.differentLetters)
+        
         
     def newWord(self, secretWord, guesses):
         secret = secretWord
-        differentNumber = Set(list(secret))
-        while len(differentNumber) > guesses:
-            print 'There is ', len(differentNumber),' different letters'
+        differentNumber = self.wordDifferentLetters(secret)
+        while differentNumber > guesses:
             print 'The old word was', secret
-            print 'Looking for a new word'
+            print "Too hard to guess. Let's look for a new word"
             print '---------------------------------------------'
             secret = self.loadWord()
-            differentNumber = Set(list(secret))
-        print 'There is '  , len(differentNumber), ' different letters'
+            differentNumber = self.wordDifferentLetters(secret)
+        print 'There is '  , differentNumber, ' different letters'
         return secret
 

@@ -7,12 +7,11 @@ game = Game()
 def guessNumber():
     while True:
         try:
-            guesses = int(raw_input('Choose the number of guesses to play: '))
+            guesses = int(raw_input('How many guesses do you want?: '))
             break
         except ValueError:
-            print "Oops!  That was no valid number.  Try again..."
+            print "Sorry! Can't understand"
             print '----------------------------------------------'
-    print 'Cool you have', guesses, 'guesses'
     return guesses
 
 secret = secretWord.loadWord().lower()
